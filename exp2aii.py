@@ -39,21 +39,24 @@ def build_tree():
 
     return nodes[next(iter(nodes))], nodes
 
-def dfs(root, target_value, path=None):
+def dfs(root, target_value, path=None, traversal_path=None):
     if path is None:
         path = []
+    if traversal_path is None:
+        traversal_path = []
 
+    traversal_path.append(root.value)
     path.append(root.value)
 
     if root.value == target_value:
-        return path
+        return path, traversal_path
 
     for child in root.children:
-        result = dfs(child, target_value, path.copy())
+        result, traversal_path = dfs(child, target_value, path.copy(), traversal_path)
         if result:
-            return result
+            return result, traversal_path
 
-    return None
+    return None, traversal_path
 
 def generate_arr(root, nodes, arr=None, index=0):
     if arr is None:
@@ -100,7 +103,6 @@ def tree_printer(arr, num_lvl):
         current_level += 1
 
 def find_depth(root):
-
     if root is None:
         return -1
 
@@ -117,10 +119,10 @@ def main():
 
     arr = generate_arr(root, nodes)
     target_value = input("Enter the value to search for: ")
-    path = dfs(root, target_value)
-
+    path, traversal_path = dfs(root, target_value)
     if path:
-        print(f"Path = {' -> '.join(path)}")
+        print(f"Traversal path: {' -> '.join(traversal_path)}")
+        print(f"Path to node: {' -> '.join(path)}")
         print("Node found")
     else:
         print("Value not found in the tree.")
@@ -130,4 +132,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
