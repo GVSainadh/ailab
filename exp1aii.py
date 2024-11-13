@@ -44,17 +44,19 @@ def construct_tree():
 
 def breadth_first_search(root, target_value):
     queue = deque([(root, [root.value])])
+    traversal_path = []  # To keep track of the traversal order
 
     while queue:
         current_node, path = queue.popleft()
+        traversal_path.append(current_node.value)
 
         if current_node.value == target_value:
-            return path
+            return path, traversal_path
 
         for child in current_node.children:
             queue.append((child, path + [child.value]))
 
-    return None
+    return None, traversal_path
 
 def generate_tree_array_representation(root, nodes, arr=None, index=0):
     if arr is None:
@@ -117,10 +119,11 @@ def main():
 
     tree_array = generate_tree_array_representation(root, nodes)
     target_value = input("Enter the value to search for: ")
-    path = breadth_first_search(root, target_value)
+    path, traversal_path = breadth_first_search(root, target_value)
 
     if path:
-        print(f"Path = {' -> '.join(path)}")
+        print(f"Traversal path: {' -> '.join(traversal_path)}")
+        print(f"Path to node: {' -> '.join(path)}")
         print("Node found")
     else:
         print("Value not found in the tree.")
